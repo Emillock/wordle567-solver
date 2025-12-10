@@ -1,5 +1,12 @@
+from solver import *
+
+
 def main():
-    print("Hello from wordle567-solver!")
+    allowed_letters = [lowercase_letters, lowercase_letters,
+                       lowercase_letters, lowercase_letters, lowercase_letters]
+    # allowed_letters = [["h"], ["y"],
+    #                    lowercase_letters, lowercase_letters, lowercase_letters]
+    print(solve_wordle(allowed_letters, 5))
 
 
 if __name__ == "__main__":
