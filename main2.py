@@ -64,7 +64,7 @@ def main():
     MAX_GUESSES = 6
 
     #1) Load the words using the function from wordle_game.py
-    words = load_valid_words() # <--- This is the list from valid_words.txt
+    words = load_valid_words() #This is the list from valid_words.txt
 
     #Initialize the CSP domains to the full alphabet for all 5 positions
     allowed_letters = [list(lowercase_letters) for _ in range(5)]
@@ -74,14 +74,9 @@ def main():
     print(f"--- Wordle Solver Simulation ---")
     print(f"Target Word Selected: (Keep this hidden from the agent!)")
 
-    #DEMO PART - the initial guess from the solver.py.
-    #INcomplete for now
-    '''
-    current_guess =
+    #Initial guess
+    current_guess = "sanes"
     print(f"Agent's Initial Guess: {current_guess.upper()}")
-    '''
-    #Example initial guess
-    current_guess = "crane"
 
     for guess_num in range(1, MAX_GUESSES + 1):
         print(f"\n--- Guess {guess_num}: {current_guess.upper()} ---")
@@ -108,9 +103,6 @@ def main():
 
         # 4) Run the Solver (Generate new possibilities)
         possible_words = solve_wordle(allowed_letters, words, must_contain_counts, 5)
-
-        #NOTE: include position constraints (GREEN/GRAY/YELLOW position) in solver.py!
-        #For the full CSP, include filtering `possible_words` further here (using letter frequency heuristics).
 
         if not possible_words:
             print("\n Solver ran out of possible words. Check constraints/word list.")
