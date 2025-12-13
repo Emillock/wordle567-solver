@@ -1,4 +1,4 @@
-from solver import solve_wordle, lowercase_letters, words # Import solver functions and lists
+from solver import solve_wordle, lowercase_letters
 from wordle_game import start_new_game, generate_wordle_feedback, load_valid_words
 from typing import List, Dict, Tuple
 
@@ -63,10 +63,10 @@ def update_csp_domains(allowed_letters: List[List[str]], guess: str, feedback: L
 def main():
     MAX_GUESSES = 6
 
-    # 1. Load the words using the function from wordle_game.py
+    #1) Load the words using the function from wordle_game.py
     words = load_valid_words() # <--- This is the list from valid_words.txt
 
-    # Initialize the CSP domains to the full alphabet for all 5 positions
+    #Initialize the CSP domains to the full alphabet for all 5 positions
     allowed_letters = [list(lowercase_letters) for _ in range(5)]
 
     #Start the game
@@ -74,7 +74,13 @@ def main():
     print(f"--- Wordle Solver Simulation ---")
     print(f"Target Word Selected: (Keep this hidden from the agent!)")
 
-    #Example: Start with a strong initial guess using your heuristic
+    #DEMO PART - the initial guess from the solver.py.
+    #INcomplete for now
+    '''
+    current_guess =
+    print(f"Agent's Initial Guess: {current_guess.upper()}")
+    '''
+    #Example initial guess
     current_guess = "crane"
 
     for guess_num in range(1, MAX_GUESSES + 1):
@@ -100,7 +106,7 @@ def main():
             display = domain if len(domain) <= 5 else f"{domain[:5]}... ({len(domain)} left)"
             print(f"Pos {i}: {display}")
 
-        # 4. Run the Solver (Generate new possibilities)
+        # 4) Run the Solver (Generate new possibilities)
         possible_words = solve_wordle(allowed_letters, words, must_contain_counts, 5)
 
         #NOTE: include position constraints (GREEN/GRAY/YELLOW position) in solver.py!
