@@ -1,9 +1,9 @@
 import numpy as np
 from eda_analysis import (
     load_words, separate_by_length, calculate_position_frequencies,
-    plot_position_heatmap, plot_top_letters_per_position,
-    calculate_overall_frequency, plot_overall_frequency,
-    save_frequency_matrix
+    plot_sorted_barchart_all_positions, plot_all_positions_grid,
+    plot_top_letters_per_position, calculate_overall_frequency, 
+    plot_overall_frequency, save_frequency_matrix
 )
 
 def main():
@@ -27,10 +27,17 @@ def main():
     
     print("\nGenerating visualizations")
     
-    plot_position_heatmap(freq_5, 5)
-    plot_position_heatmap(freq_6, 6)
-    plot_position_heatmap(freq_7, 7)
+    print("Creating individual position bar charts...")
+    plot_sorted_barchart_all_positions(freq_5, 5)
+    plot_sorted_barchart_all_positions(freq_6, 6)
+    plot_sorted_barchart_all_positions(freq_7, 7)
     
+    print("Creating grid views...")
+    plot_all_positions_grid(freq_5, 5)
+    plot_all_positions_grid(freq_6, 6)
+    plot_all_positions_grid(freq_7, 7)
+    
+    print("Creating top 5 comparison charts...")
     plot_top_letters_per_position(freq_5, 5)
     plot_top_letters_per_position(freq_6, 6)
     plot_top_letters_per_position(freq_7, 7)
