@@ -1,5 +1,6 @@
 from solver import solve_wordle, lowercase_letters
-from wordle_game import start_new_game, generate_wordle_feedback, load_valid_words
+from wordle_game import start_new_game, generate_wordle_feedback
+from utils import load_valid_words
 from typing import List, Dict, Tuple
 
 # --- Core Constraint Update Logic ---
