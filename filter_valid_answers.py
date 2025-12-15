@@ -1,16 +1,33 @@
 import nltk
 from nltk.stem import WordNetLemmatizer
-from nltk.corpus import wordnet, words
+from nltk.corpus import wordnet
+import spacy
 
-# Download required data
+nlp = spacy.load("en_core_web_sm")
+
 try:
     nltk.data.find('corpora/wordnet')
-    nltk.data.find('corpora/words')
 except LookupError:
     nltk.download('wordnet')
     nltk.download('omw-1.4')
-    nltk.download('words')
-    nltk.download('averaged_perceptron_tagger')
+
+def is_proper_noun_spacy(word, sentence=None):
+    """
+    Uses spaCy token.pos_ == 'PROPN' or token.tag_ in ('NNP','NNPS').
+    If sentence provided, finds the matching token; otherwise tags the word alone.
+    """
+    text = sentence if sentence else word
+    doc = nlp(text)
+    for token in doc:
+        if token.text == word or token.text.lower() == word.lower():
+            if token.pos_ == "PROPN" or token.tag_ in ("NNP", "NNPS"):
+                return True
+            if token.ent_type_:
+                return True
+            return False
+    doc2 = nlp(word)
+    t = doc2[0]
+    return t.pos_ == "PROPN" or t.tag_ in ("NNP", "NNPS") or bool(t.ent_type_)
 
 def load_words_file(filepath='valid_words.txt'):
     """Load all valid words"""
@@ -20,7 +37,6 @@ def load_words_file(filepath='valid_words.txt'):
 
 def is_english_word(word):
     """Check if word exists in WordNet (real English word)"""
-    # Must have at least one synset in WordNet
     return len(wordnet.synsets(word)) > 0
 
 def is_regular_plural(word):
@@ -29,7 +45,6 @@ def is_regular_plural(word):
     lemma = lemmatizer.lemmatize(word, pos='n')
     
     if lemma != word:
-        # Regular plural patterns
         if word == lemma + 's':
             return True
         if word == lemma + 'es':
@@ -45,7 +60,6 @@ def is_regular_past_tense(word):
     lemma = lemmatizer.lemmatize(word, pos='v')
     
     if lemma != word and word.endswith('ed'):
-        # Regular past tense patterns
         if word == lemma + 'ed':
             return True
         if lemma.endswith('e') and word == lemma + 'd':
@@ -61,7 +75,7 @@ def filter_by_wordle_rules(word_list, word_length):
     """Filter words by Wordle answer rules"""
     filtered = []
     
-    print(f"\nProcessing {word_length}-letter words...")
+    print(f"\nProcessing {word_length}-letter words")
     count = 0
     
     for word in word_list:
@@ -70,17 +84,17 @@ def filter_by_wordle_rules(word_list, word_length):
         
         count += 1
         if count % 1000 == 0:
-            print(f"  Processed {count} words...")
+            print(f"  Processed {count} words")
         
-        # RULE 1: Must be a real English word in WordNet
         if not is_english_word(word):
             continue
         
-        # RULE 2: No regular plurals (-s, -es, -ies)
+        if is_proper_noun_spacy(word):
+            continue
+        
         if is_regular_plural(word):
             continue
         
-        # RULE 3: No regular past tense (-ed)
         if is_regular_past_tense(word):
             continue
         
@@ -89,18 +103,11 @@ def filter_by_wordle_rules(word_list, word_length):
     return filtered
 
 def main():
-    print("="*60)
-    print("FILTERING VALID WORDLE ANSWERS")
-    print("="*60)
-    
-    # Load all words
     print("\nLoading valid_words.txt")
     word_list = load_words_file()
     print(f"Total words: {len(word_list):,}")
     
-    # Filter for each length
-    print("\nFiltering by Wordle rules")
-    print("Rules: (1) Real English word (2) No regular plurals (3) No regular past tense")
+    print("Rules: (1) Real English word (2) No proper nouns (3) No regular plurals (4) No regular past tense")
     
     answers_5 = filter_by_wordle_rules(word_list, 5)
     print(f"✓ 5-letter valid answers: {len(answers_5):,}")
@@ -111,8 +118,7 @@ def main():
     answers_7 = filter_by_wordle_rules(word_list, 7)
     print(f"✓ 7-letter valid answers: {len(answers_7):,}")
     
-    # Save
-    print("\n Saving filtered lists")
+    print("\nSaving filtered lists")
     
     with open('answers_5letter.txt', 'w') as f:
         for word in sorted(answers_5):
@@ -129,11 +135,9 @@ def main():
             f.write(word + '\n')
     print(f"✓ Saved {len(answers_7):,} words to answers_7letter.txt")
     
-    # Show first 50 examples for verification
-    print("\First 50 5-letter answers:")
+    print("\nFirst 50 5-letter answers:")
     for i, word in enumerate(sorted(answers_5)[:50], 1):
         print(f"  {i:2}. {word}")
-
 
 if __name__ == "__main__":
     main()
