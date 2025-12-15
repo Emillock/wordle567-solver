@@ -106,7 +106,6 @@ def pretty_print(results):
 def main():
     parser = argparse.ArgumentParser(description='Simulate Wordle across all answers and compute metrics')
     parser.add_argument('--letters_number', type=int, default=7)
-    parser.add_argument('--solver', type=str, choices=['csp', 'dummy'], default='csp')
     parser.add_argument('--max-guesses', type=int, default=7)
     parser.add_argument('--limit', type=int, help='Limit number of answers to simulate (for quick tests)')
     parser.add_argument('--save-csv', type=str, help='Optional path to save per-word results CSV')
