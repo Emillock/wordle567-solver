@@ -4,16 +4,18 @@ import seaborn as sns
 import os
 from collections import Counter
 
+from utils import load_valid_answers
+
 def load_words(filepath='valid_words.txt'):
     """Load all valid words from the dataset"""
     with open(filepath, 'r') as file:
         words = [line.strip().lower() for line in file.readlines()]
     return words
-def separate_by_length(words):
+def separate_by_length():
     """Separate words into 5, 6, and 7-letter categories"""
-    words_5 = [w for w in words if len(w) == 5]
-    words_6 = [w for w in words if len(w) == 6]
-    words_7 = [w for w in words if len(w) == 7]
+    words_5 = load_valid_answers(5)
+    words_6 = load_valid_answers(6)
+    words_7 = load_valid_answers(7)
     return words_5, words_6, words_7
 
 def calculate_position_frequencies(words, word_length):

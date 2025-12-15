@@ -2,27 +2,23 @@ from collections import Counter
 from typing import Dict, List
 
 #Word List
-def load_valid_words(path: str = 'valid_words.txt', letters_number:int=5) -> List[str]:
-    #Loads 5-letter words from the specified file path
-
-    #In case of error, will use sample words
-    sample_words = ["crane", "train", "power", "sheep", "light"]
+def load_valid_answers(letters_number:int=5) -> List[str]:
+    #Loads n-letter words from the specified file path
     words = []
 
     try:
-        with open(path, 'r') as file:
-            #Store all words in lowercase and strip whitespace
-            words = [line.strip().lower() for line in file.readlines()]
+        with open(f'answers_{letters_number}letter.txt', 'r') as f:
+            words = [w.strip() for w in f.readlines()]
     except FileNotFoundError:
-        print(f"Error: {path} not found. Using a sample list for simulation.")
-        words = sample_words
+        print(f"Error: 'answers_{letters_number}letter.txt' not found. Using a sample list for simulation.")
+        return []
 
-    #Filter the list to make sure only 5-letter words are used
+    #Filter the list to make sure only n-letter words are used
     n_letter_words = [w for w in words if len(w) == letters_number]
 
     if not n_letter_words:
         print(f"Warning: No {letters_number}-letter words found. Using sample list.")
-        return sample_words
+        return []
 
     return n_letter_words
 

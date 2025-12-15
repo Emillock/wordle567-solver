@@ -4,7 +4,6 @@ if __name__ == '__main__':
     # tiny example word list (replace with real wordlist)
     
     csp = CSPSolver(letters_number=5)
-
     # Example: suppose we guessed 'crate' and feedback was [GRAY, YELLOW, GRAY, GREEN, GRAY]
     # meaning: c=X, r=Y, a=X, t=G, e=X
     guess = 'crate'

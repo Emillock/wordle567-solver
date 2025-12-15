@@ -2,6 +2,8 @@ from typing import List, Dict, Tuple, Optional
 from collections import Counter, defaultdict
 import copy
 
+from utils import load_valid_answers
+
 
 def compute_max_letter_counts(words: List[str], letters_number: int) -> Dict[str, int]:
     """Compute the maximum number of occurrences of each letter across the word list."""
@@ -33,8 +35,7 @@ def positional_frequencies(words: List[str], letters_number: int) -> List[Dict[s
 class CSPSolver:
     def __init__(self, letters_number: int = 5):
         self.letters_number = letters_number
-        with open(f'answers_{letters_number}letter.txt', 'r') as f:
-            self.words = [w.strip() for w in f.readlines()]
+        self.words = load_valid_answers(letters_number=letters_number)
 
         # Initial domain: all lowercase letters that appear in word list for that position
         freqs = positional_frequencies(self.words, letters_number)

@@ -7,7 +7,7 @@ def main():
     print(f"Total words: {len(words):,}")
     
     print("\nSeparating by length")
-    words_5, words_6, words_7 = separate_by_length(words)
+    words_5, words_6, words_7 = separate_by_length()
     print(f"5-letter words: {len(words_5):,}")
     print(f"6-letter words: {len(words_6):,}")
     print(f"7-letter words: {len(words_7):,}")
