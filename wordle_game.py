@@ -14,23 +14,24 @@ def generate_wordle_feedback(target_word: str, guess: str) -> List[str]:
     #Check if the chosen word and the guess matches the requirement
     target_word = target_word.lower()
     guess = guess.lower()
+    letters_number=len(target_word)
 
-    if len(target_word) != 5 or len(guess) != 5:
-        raise ValueError("Both target_word and guess must be 5 letters long.")
+    if len(guess) != letters_number:
+        raise ValueError(f"Both guess must be {letters_number} letters long.")
 
-    feedback = [''] * 5
+    feedback = [''] * letters_number
     #Use a mutable list for target letters to handle duplicates properly
     target_letters = list(target_word)
 
     #1) Find all GREEN matches first
-    for i in range(5):
+    for i in range(letters_number):
         if guess[i] == target_word[i]:
             feedback[i] = 'GREEN'
             #Mark this letter as "used" in the target list
             target_letters[i] = None
 
     #2) Find YELLOW and GRAY matches
-    for i in range(5):
+    for i in range(letters_number):
         #Skip letters that were already marked GREEN
         if feedback[i] == 'GREEN':
             continue
