@@ -94,9 +94,9 @@ def filter_by_wordle_rules(word_list, word_length):
         # if not is_english_word(word):
         #     continue
         
-        if is_proper_noun_spacy(word):
-            count_skipped_prop += 1
-            continue
+        # if is_proper_noun_spacy(word):
+        #     count_skipped_prop += 1
+        #     continue
         
         if is_regular_plural(word):
             count_skipped_reg += 1
@@ -132,17 +132,17 @@ def main():
     
     print("\nSaving filtered lists")
     
-    with open('answers_5letter.txt', 'w') as f:
+    with open('word_lists/valid_words_5letter.txt', 'w') as f:
         for word in sorted(answers_5):
             f.write(word + '\n')
     print(f"✓ Saved {len(answers_5):,} words to answers_5letter.txt")
     
-    with open('answers_6letter.txt', 'w') as f:
+    with open('word_lists/valid_words_6letter.txt', 'w') as f:
         for word in sorted(answers_6):
             f.write(word + '\n')
     print(f"✓ Saved {len(answers_6):,} words to answers_6letter.txt")
     
-    with open('answers_7letter.txt', 'w') as f:
+    with open('word_lists/valid_words_7letter.txt', 'w') as f:
         for word in sorted(answers_7):
             f.write(word + '\n')
     print(f"✓ Saved {len(answers_7):,} words to answers_7letter.txt")

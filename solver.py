@@ -2,7 +2,7 @@ from typing import List, Dict, Tuple, Optional
 from collections import Counter, defaultdict
 import copy
 
-from utils import load_valid_answers
+from utils import load_valid_words
 
 
 def compute_max_letter_counts(words: List[str], letters_number: int) -> Dict[str, int]:
@@ -35,7 +35,7 @@ def positional_frequencies(words: List[str], letters_number: int) -> List[Dict[s
 class CSPSolver:
     def __init__(self, letters_number: int = 5):
         self.letters_number = letters_number
-        self.words = load_valid_answers(letters_number=letters_number)
+        self.words = load_valid_words(letters_number=letters_number)
 
         # Initial domain: all lowercase letters that appear in word list for that position
         freqs = positional_frequencies(self.words, letters_number)
@@ -180,7 +180,7 @@ class CSPSolver:
         """
         # Quick candidate filter first to speed things up
         candidates = self.candidate_words()
-        print(f"Candidate words count: {len(candidates)}")
+        # print(f"Candidate words count: {len(candidates)}")
         if candidates:
             # prefer candidates that match domains and counts (and exist in dictionary)
             # score by sum of positional frequencies (higher is better)

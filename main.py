@@ -2,15 +2,15 @@ from typing import List, Optional
 
 from solver import CSPSolver
 from wordle_game import start_new_game, generate_wordle_feedback
-from utils import load_valid_answers
+from utils import load_valid_words
 
-
+# here you can test the integration of the CSP solver with the Wordle game simulation
 def main():
     MAX_GUESSES = 6
     LETTERS_NUMBER = 5
 
     # Load n-letter answer list
-    words = load_valid_answers(letters_number=LETTERS_NUMBER)
+    words = load_valid_words(letters_number=LETTERS_NUMBER)
     if not words:
         print("No words available to run simulation. Ensure answers_5letter.txt exists.")
         return
