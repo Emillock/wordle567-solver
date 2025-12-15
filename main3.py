@@ -1,10 +1,5 @@
 import numpy as np
-from eda_analysis import (
-    load_words, separate_by_length, calculate_position_frequencies,
-    plot_sorted_barchart_all_positions, plot_all_positions_grid,
-    plot_top_letters_per_position, calculate_overall_frequency, 
-    plot_overall_frequency, save_frequency_matrix
-)
+from eda_analysis import *
 
 def main():
     print("\nLoading word list")

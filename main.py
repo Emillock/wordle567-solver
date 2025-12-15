@@ -1,10 +1,9 @@
-from solver import CSPSolver, load_valid_words
+from solver import CSPSolver
 
 if __name__ == '__main__':
     # tiny example word list (replace with real wordlist)
-    WORDS = load_valid_words('valid_words.txt', letters_number=5)
     
-    csp = CSPSolver(WORDS, letters_number=5)
+    csp = CSPSolver(letters_number=5)
 
     # Example: suppose we guessed 'crate' and feedback was [GRAY, YELLOW, GRAY, GREEN, GRAY]
     # meaning: c=X, r=Y, a=X, t=G, e=X

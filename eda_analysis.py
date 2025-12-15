@@ -33,6 +33,37 @@ def calculate_position_frequencies(words, word_length):
     
     return freq_matrix
 
+
+def alphabet_order_by_position(words=None, word_length=None, freq_matrix=None, uppercase=True):
+    # Obtain freq_matrix if not provided
+    if freq_matrix is None:
+        if words is None or word_length is None:
+            raise ValueError("Either provide freq_matrix or both words and word_length")
+        freq_matrix = calculate_position_frequencies(words, word_length)
+
+    # Ensure freq_matrix is numpy array
+    freq_matrix = np.asarray(freq_matrix)
+
+    if freq_matrix.ndim != 2 or freq_matrix.shape[1] != 26:
+        raise ValueError("freq_matrix must be shape (positions, 26)")
+
+    letters = [chr(i) for i in range(ord('a'), ord('z')+1)]
+    ordered = []
+
+    for pos in range(freq_matrix.shape[0]):
+        # sort indices by frequency descending
+        sorted_indices = np.argsort(freq_matrix[pos])[::-1]
+        ordered_letters = [letters[i] for i in sorted_indices]
+        if uppercase:
+            ordered_letters = [l.upper() for l in ordered_letters]
+        ordered.append(ordered_letters)
+
+    # Print result nicely
+    for pos, letters_list in enumerate(ordered):
+        print(f"Position {pos+1}: {' '.join(letters_list)}")
+
+    return ordered
+
 def plot_sorted_barchart_all_positions(freq_matrix, word_length, output_dir='eda_visualizations'):
     """Sorted bar charts for each position - much clearer than heatmap!"""
     os.makedirs(output_dir, exist_ok=True)

@@ -3,7 +3,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet
 import spacy
 
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_web_sm") # if got error: python -m spacy download en_core_web_sm
 
 try:
     nltk.data.find('corpora/wordnet')
@@ -35,9 +35,9 @@ def load_words_file(filepath='valid_words.txt'):
         word_list = [line.strip().lower() for line in file.readlines()]
     return word_list
 
-def is_english_word(word):
-    """Check if word exists in WordNet (real English word)"""
-    return len(wordnet.synsets(word)) > 0
+# def is_english_word(word):
+#     """Check if word exists in WordNet (real English word)"""
+#     return len(wordnet.synsets(word)) > 0
 
 def is_regular_plural(word):
     """Check if word is a REGULAR plural"""
@@ -77,29 +77,41 @@ def filter_by_wordle_rules(word_list, word_length):
     
     print(f"\nProcessing {word_length}-letter words")
     count = 0
-    
+    count_skipped_past = 0
+    count_skipped_reg = 0
+    count_skipped_prop = 0
+    count_skipped_eng = 0
+    count_skipped_len = 0
     for word in word_list:
         if len(word) != word_length:
+            count_skipped_len += 1
             continue
         
         count += 1
         if count % 1000 == 0:
             print(f"  Processed {count} words")
         
-        if not is_english_word(word):
-            continue
+        # if not is_english_word(word):
+        #     continue
         
         if is_proper_noun_spacy(word):
+            count_skipped_prop += 1
             continue
         
         if is_regular_plural(word):
+            count_skipped_reg += 1
             continue
         
         if is_regular_past_tense(word):
+            count_skipped_past += 1
             continue
         
         filtered.append(word)
-    
+    # print(f"  Skipped {count_skipped_eng} non-English words")
+    print(f"  Skipped {count_skipped_prop} proper nouns")
+    print(f"  Skipped {count_skipped_reg} regular plurals")
+    print(f"  Skipped {count_skipped_past} regular past tense words")
+    print(f"  Skipped {count_skipped_len} words of incorrect length")
     return filtered
 
 def main():
