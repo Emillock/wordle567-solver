@@ -7,10 +7,10 @@ def load_valid_answers(letters_number:int=5) -> List[str]:
     words = []
 
     try:
-        with open(f'answers_{letters_number}letter.txt', 'r') as f:
+        with open(f'word_lists/answers_{letters_number}letter.txt', 'r') as f:
             words = [w.strip() for w in f.readlines()]
     except FileNotFoundError:
-        print(f"Error: 'answers_{letters_number}letter.txt' not found. Using a sample list for simulation.")
+        print(f"Error: 'word_lists/answers_{letters_number}letter.txt' not found. Using a sample list for simulation.")
         return []
 
     #Filter the list to make sure only n-letter words are used

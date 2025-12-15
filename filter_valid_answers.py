@@ -29,7 +29,7 @@ def is_proper_noun_spacy(word, sentence=None):
     t = doc2[0]
     return t.pos_ == "PROPN" or t.tag_ in ("NNP", "NNPS") or bool(t.ent_type_)
 
-def load_words_file(filepath='valid_words.txt'):
+def load_words_file(filepath='word_lists/valid_words.txt'):
     """Load all valid words"""
     with open(filepath, 'r') as file:
         word_list = [line.strip().lower() for line in file.readlines()]
@@ -115,7 +115,7 @@ def filter_by_wordle_rules(word_list, word_length):
     return filtered
 
 def main():
-    print("\nLoading valid_words.txt")
+    print("\nLoading word_lists/valid_words.txt")
     word_list = load_words_file()
     print(f"Total words: {len(word_list):,}")
     

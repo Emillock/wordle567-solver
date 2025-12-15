@@ -6,7 +6,7 @@ from collections import Counter
 
 from utils import load_valid_answers
 
-def load_words(filepath='valid_words.txt'):
+def load_words(filepath='word_lists/valid_words.txt'):
     """Load all valid words from the dataset"""
     with open(filepath, 'r') as file:
         words = [line.strip().lower() for line in file.readlines()]
