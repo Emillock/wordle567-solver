@@ -1,6 +1,7 @@
 import argparse
 import csv
 import sys
+import time
 from collections import defaultdict
 from statistics import mean
 
@@ -85,12 +86,15 @@ def simulate(answers: list, max_guesses: int = 6, limit: int = None):
     guess_counts = []
     distribution = defaultdict(int)
     failed_words = []
+    game_times = []
 
+    total_start = time.perf_counter()
     for idx, target in enumerate(answers):
         if limit and idx >= limit:
             break
         total += 1
-
+        # measure single-game time
+        game_start = time.perf_counter()
         # instantiate solver fresh for each target
 
         solver = CSPSolver(letters_number=len(target))
@@ -124,18 +128,26 @@ def simulate(answers: list, max_guesses: int = 6, limit: int = None):
             failed_words.append(target)
             distribution['fail'] += 1
 
+        # record elapsed time for this game
+        game_elapsed = time.perf_counter() - game_start
+        game_times.append(game_elapsed)
+
         # simple progress every 100 games
         if total % 100 == 0:
             print(f"Simulated {total} games... wins so far: {wins}")
 
     winrate = (wins / total) * 100 if total else 0
     avg_guesses = mean(guess_counts) if guess_counts else float('nan')
+    total_elapsed = time.perf_counter() - total_start
+    avg_time_per_game = mean(game_times) if game_times else float('nan')
 
     results = {
         'total': total,
         'wins': wins,
         'winrate_percent': winrate,
         'average_guesses_on_wins': avg_guesses,
+        'total_time_seconds': total_elapsed,
+        'average_time_per_game_seconds': avg_time_per_game,
         'distribution': dict(distribution),
         'failed_words': failed_words,
     }
@@ -149,6 +161,11 @@ def pretty_print(results):
     print(f"Wins: {results['wins']} ({results['winrate_percent']:.2f}%)")
     if results['wins'] > 0:
         print(f"Average guesses (wins only): {results['average_guesses_on_wins']:.2f}")
+    # timing info
+    if 'total_time_seconds' in results:
+        print(f"Total simulation time: {results['total_time_seconds']:.3f} s")
+    if 'average_time_per_game_seconds' in results:
+        print(f"Average time per game: {results['average_time_per_game_seconds']*1000:.3f} ms")
     print('\nDistribution:')
     for k in sorted(results['distribution'].keys(), key=lambda x: (x=='fail', x)):
         print(f"  {k}: {results['distribution'][k]}")
@@ -187,6 +204,11 @@ def main():
             writer.writerow(['wins', results['wins']])
             writer.writerow(['winrate_percent', f"{results['winrate_percent']:.4f}"])
             writer.writerow(['average_guesses_on_wins', results['average_guesses_on_wins']])
+            # include timing info if present
+            if 'total_time_seconds' in results:
+                writer.writerow(['total_time_seconds', f"{results['total_time_seconds']:.6f}"])
+            if 'average_time_per_game_seconds' in results:
+                writer.writerow(['average_time_per_game_seconds', f"{results['average_time_per_game_seconds']:.6f}"])
             writer.writerow(['distribution', str(results['distribution'])])
             writer.writerow(['failed_words_count', len(results['failed_words'])])
 
